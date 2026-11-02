@@ -1,23 +1,365 @@
----
-import Stats from '../components/Stats.astro';
-import Services from '../components/Services.astro';
-import HeroSection from '../components/HeroSection.astro';
-import Layout from '../layouts/Layout.astro';
-import Testimonials from '../components/Testimonials.astro';
-import CallToAction from '../components/CallToAction.astro';
-import Blog from '../components/Blog.astro';
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>itrel — Architecture infonuagique et IA</title>
+<meta name="description" content="itrel, Régis Tremblay Lefrançois : architecte infonuagique et DevOps. Infrastructure Azure, Kubernetes, Terraform et sécurité pour des projets d'IA qui tiennent en production.">
+<meta name="theme-color" content="#0E1A2B">
+<meta property="og:title" content="itrel — L'IA a besoin de fondations solides">
+<meta property="og:description" content="Architecture infonuagique, DevOps et infrastructure pour l'IA. Lévis, Québec.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='28' fill='%230E1A2B'/%3E%3Ccircle cx='50' cy='27' r='10' fill='%23FF6B35'/%3E%3Crect x='40' y='44' width='20' height='38' fill='%23F5F4EF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono&display=swap">
+<style is:global>
+:root{
+  --paper:#0E1A2B;--surface:#16243A;--ink:#F5F4EF;--slate:#A7B0BD;--line:#2A3A52;
+  --signal:#FF6B35;--on-signal:#0E1A2B;--ember:#FF8A5C;--ember-solid:#C2410C;
+  --font-display:"Space Grotesk","IBM Plex Sans",system-ui,sans-serif;
+  --font-sans:"IBM Plex Sans",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,monospace;
+  --radius-sm:6px;--radius-md:14px;--radius-lg:28px;
+  color-scheme:dark;box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/24px var(--font-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,56px)}
 
+/* header */
+.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:24px 0}
+.lockup{display:flex;align-items:center;gap:6px;text-decoration:none;font:700 24px/1 var(--font-display);letter-spacing:-.045em}
+.lockup svg{width:18px;height:18px}
+.nav{display:flex;align-items:center;gap:24px}
+.nav a.link{font-size:14px;color:var(--slate);text-decoration:none}
+.nav a.link:hover{color:var(--ink)}
+.lang{display:flex;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden}
+.lang button{all:unset;cursor:pointer;font:400 13px/1 var(--font-mono);padding:8px 10px;color:var(--slate)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.lang button:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
+.cta-sm{font-size:14px;text-decoration:none;padding:10px 16px;border-radius:var(--radius-md);background:var(--signal);color:var(--on-signal);font-weight:500}
 
----
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;min-height:calc(100svh - 170px);padding:24px 0 48px}
+.who{font:400 14px/20px var(--font-mono);color:var(--slate);margin:0 0 20px}
+h1{font:700 clamp(44px,6.4vw,86px)/.95 var(--font-display);letter-spacing:-.045em;margin:0 0 24px;max-width:11ch}
+.lede{color:var(--slate);font-size:18px;line-height:28px;max-width:40ch;margin:0 0 32px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;min-height:52px;padding:0 26px;border-radius:var(--radius-md);font:500 16px/1 var(--font-sans);text-decoration:none;transition:transform .25s cubic-bezier(.34,1.8,.5,1)}
+.btn:hover{transform:translateY(-3px)}
+.btn.primary{background:var(--signal);color:var(--on-signal)}
+.btn.ghost{border:1px solid var(--line)}
+.copy>*{opacity:0;animation:up .8s cubic-bezier(.2,.8,.3,1) forwards}
+.copy>*:nth-child(1){animation-delay:2.4s}.copy>*:nth-child(2){animation-delay:2.5s}.copy>*:nth-child(3){animation-delay:2.65s}.copy>*:nth-child(4){animation-delay:2.8s}
 
-<Layout title="Welcome to Astrolus.">
-	<main class="space-y-40 mb-40">
-		<HeroSection/>
-		<Services/>
-		<!-- <Stats/> -->
-		<Testimonials/>
-		<CallToAction/>
-		<!-- <Blog/> -->
-	</main>
-</Layout>
+.stage{width:100%;max-width:500px;justify-self:end;overflow:visible}
+.stage .b{transform-box:fill-box;transform-origin:50% 100%;transform:translateY(-120vh)}
+.b1{animation:fall 1s linear .2s forwards}
+.b2{animation:fall 1s linear .45s forwards}
+.b3{animation:fall 1s linear .7s forwards}
+.stage .stem{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0);animation:rise .85s cubic-bezier(.2,.8,.3,1) 1.15s forwards}
+.dot{animation:fall 1.2s linear 1.65s forwards}
+.grid-dots circle{fill:var(--slate);opacity:.55}
+.c-ink{fill:var(--ink)}.c-sig{fill:var(--signal)}.c-slate{fill:#3A4A63}.c-ember{fill:var(--ember-solid)}.c-tint{fill:var(--surface)}
 
+/* trust strip */
+.trust{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 0;display:flex;align-items:center;gap:16px 40px;flex-wrap:wrap}
+.trust p{margin:0;font-size:14px;color:var(--slate)}
+.trust ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:12px 36px}
+.trust li{font:700 20px/1 var(--font-display);letter-spacing:-.02em;color:var(--ink);opacity:.82}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:88px 0 0}
+.stat b{display:block;font:700 clamp(48px,6vw,72px)/1 var(--font-display);letter-spacing:-.04em}
+.stat b i{font-style:normal;color:var(--signal)}
+.stat span{display:block;color:var(--slate);margin-top:8px;max-width:24ch}
+
+/* sections */
+section{padding:112px 0}
+.sec-title{font:700 clamp(30px,4vw,48px)/1.05 var(--font-display);letter-spacing:-.03em;margin:0 0 16px;max-width:20ch}
+.sec-sub{color:var(--slate);font-size:18px;line-height:28px;margin:0 0 56px;max-width:52ch}
+
+/* pipeline */
+.pipe{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.pipe::before{content:"";position:absolute;left:10%;right:10%;top:28px;height:2px;background:var(--line)}
+.pulse{position:absolute;top:22px;left:10%;width:14px;height:14px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 6px rgba(255,107,53,.18);animation:travel 4.5s cubic-bezier(.6,0,.4,1) infinite}
+.step{position:relative;text-align:center}
+.node{width:58px;height:58px;margin:0 auto 16px;border-radius:50%;background:var(--paper);border:2px solid var(--line);display:grid;place-items:center}
+.node svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:1.8}
+.step:last-child .node{border-color:var(--signal)}
+.step b{display:block;font:500 17px/24px var(--font-display)}
+.step span{display:block;color:var(--slate);font-size:14px;line-height:20px;margin-top:4px}
+.base{margin-top:40px;padding:16px 20px;border:1px dashed var(--line);border-radius:var(--radius-md);display:flex;gap:12px 24px;flex-wrap:wrap;align-items:center;justify-content:center;color:var(--slate);font-size:14px}
+.base strong{color:var(--ink);font-weight:500}
+.base code{font:400 13px/1 var(--font-mono);color:var(--ink);background:var(--surface);padding:6px 8px;border-radius:var(--radius-sm)}
+
+/* services */
+.svc{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.svc article{background:var(--surface);border-radius:var(--radius-md);padding:32px;border:1px solid var(--line)}
+.svc article.lead{background:var(--signal);color:var(--on-signal);border-color:var(--signal)}
+.svc article.lead p{color:var(--on-signal)}
+.svc h3{font:500 26px/32px var(--font-display);letter-spacing:-.01em;margin:0 0 8px}
+.svc p{color:var(--slate);margin:0;max-width:44ch}
+
+/* mandates */
+.cases{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--ink)}
+.case{padding:32px 32px 32px 0;border-bottom:1px solid var(--line)}
+.case:nth-child(even){padding:32px 0 32px 32px;border-left:1px solid var(--line)}
+.client{font-size:14px;color:var(--ember);font-weight:500;margin:0 0 12px}
+.case h3{font:500 24px/30px var(--font-display);letter-spacing:-.01em;margin:0 0 16px;max-width:26ch}
+.tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.tags li{font:400 12px/1 var(--font-mono);padding:6px 8px;border:1px solid var(--line);border-radius:var(--radius-sm);color:var(--slate)}
+
+/* certs */
+.certs{display:flex;flex-wrap:wrap;gap:12px;margin-top:48px}
+.certs a{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid var(--line);border-radius:999px;font-size:14px;text-decoration:none}
+.certs a::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--signal)}
+.certs a:hover{border-color:var(--ink)}
+
+/* contact */
+.contact{text-align:center;padding-bottom:96px}
+.contact h2{font:700 clamp(38px,7vw,96px)/.95 var(--font-display);letter-spacing:-.045em;margin:0 0 16px}
+.contact p{color:var(--slate);font-size:18px;margin:0 0 32px}
+.contact .ctas{justify-content:center}
+footer{border-top:1px solid var(--line);padding:24px 0 32px;color:var(--slate);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{text-decoration:none}footer a:hover{color:var(--ink)}
+
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes rise{0%{transform:scaleY(0)}55%{transform:scaleY(1.12)}72%{transform:scaleY(.94)}86%{transform:scaleY(1.03)}100%{transform:scaleY(1)}}
+@keyframes fall{
+  0%{transform:translateY(-120vh);animation-timing-function:cubic-bezier(.55,0,1,.45)}
+  40%{transform:translateY(0) scale(1.06,.9);animation-timing-function:cubic-bezier(0,.55,.45,1)}
+  46%{transform:translateY(-4%) scale(1)}
+  60%{transform:translateY(-14%);animation-timing-function:cubic-bezier(.55,0,1,.45)}
+  76%{transform:translateY(0) scale(1.03,.96);animation-timing-function:cubic-bezier(0,.55,.45,1)}
+  86%{transform:translateY(-4%) scale(1)}
+  95%,100%{transform:translateY(0)}}
+@keyframes travel{0%{left:10%;opacity:0}6%{opacity:1}88%{opacity:1}94%,100%{left:calc(90% - 14px);opacity:0}}
+@keyframes travel-v{0%{top:22px;opacity:0}6%{opacity:1}88%{opacity:1}94%,100%{top:calc(100% - 36px);opacity:0}}
+
+@media (max-width:900px){
+  .nav a.link{display:none}
+  .hero{grid-template-columns:1fr;min-height:auto;padding:8px 0 56px;gap:24px}
+  .stage{order:-1;justify-self:center;max-width:280px}
+  .stats{grid-template-columns:1fr;gap:32px;padding-top:56px}
+  .pipe{grid-template-columns:1fr;gap:28px}
+  .pipe::before{left:28px;right:auto;top:28px;bottom:28px;width:2px;height:auto}
+  .pulse{left:22px;animation-name:travel-v}
+  .step{display:grid;grid-template-columns:58px 1fr;gap:16px;text-align:left;align-items:center}
+  .node{margin:0}
+  .base{justify-content:flex-start}
+  .svc,.cases{grid-template-columns:1fr}
+  .case,.case:nth-child(even){padding:28px 0;border-left:0}
+  section{padding:72px 0}
+}
+@media (max-width:420px){.cta-sm{display:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important}
+  .pulse{display:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="lockup" href="#" aria-label="itrel">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="23" r="12" fill="#FF6B35"/><rect x="38" y="43" width="24" height="46" fill="#F5F4EF"/></svg>itrel
+    </a>
+    <div class="nav">
+      <a class="link" href="#services" data-i="nav.services">Services</a>
+      <a class="link" href="#mandats" data-i="nav.work">Mandats</a>
+      <div class="lang" role="group" aria-label="Langue / Language">
+        <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="cta-sm" href="#contact" data-i="nav.contact">Me joindre</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="copy">
+        <p class="who" data-i="hero.who">Régis Tremblay Lefrançois, architecte infonuagique</p>
+        <h1 data-i="hero.title">L'IA a besoin de fondations solides.</h1>
+        <p class="lede" data-i="hero.lede">Je conçois l'infrastructure Azure, Kubernetes et réseau qui permet à vos projets d'IA de passer de la démo à la production, en toute sécurité.</p>
+        <div class="ctas">
+          <a class="btn primary" href="#contact" data-i="hero.cta">Démarrer un mandat</a>
+          <a class="btn ghost" href="#mandats" data-i="hero.cta2">Voir mes mandats</a>
+        </div>
+      </div>
+
+      <svg class="stage" viewBox="0 0 400 420" role="img" aria-label="itrel">
+        <g class="b b1">
+          <rect class="c-tint" x="300" y="150" width="96" height="260" rx="14"/>
+          <g class="grid-dots">
+            <circle cx="320" cy="174" r="2"/><circle cx="336" cy="174" r="2"/><circle cx="352" cy="174" r="2"/><circle cx="368" cy="174" r="2"/>
+            <circle cx="320" cy="190" r="2"/><circle cx="336" cy="190" r="2"/><circle cx="352" cy="190" r="2"/><circle cx="368" cy="190" r="2"/>
+            <circle cx="320" cy="206" r="2"/><circle cx="336" cy="206" r="2"/><circle cx="352" cy="206" r="2"/><circle cx="368" cy="206" r="2"/>
+            <circle cx="320" cy="222" r="2"/><circle cx="336" cy="222" r="2"/><circle cx="352" cy="222" r="2"/><circle cx="368" cy="222" r="2"/>
+            <circle cx="320" cy="238" r="2"/><circle cx="336" cy="238" r="2"/><circle cx="352" cy="238" r="2"/><circle cx="368" cy="238" r="2"/>
+          </g>
+        </g>
+        <rect class="b b2 c-ember" x="176" y="300" width="112" height="110" rx="14"/>
+        <rect class="b b3 c-slate" x="176" y="120" width="112" height="168" rx="14"/>
+        <rect class="stem c-ink" x="40" y="200" width="120" height="210"/>
+        <circle class="b dot c-sig" cx="100" cy="122" r="58"/>
+      </svg>
+    </div>
+
+    <div class="trust">
+      <p data-i="trust.label">Ils m'ont fait confiance</p>
+      <ul>
+        <li>Desjardins</li>
+        <li data-i="trust.ia">iA Groupe financier</li>
+        <li>Élections Québec</li>
+        <li>Agri-Marché</li>
+        <li data-i="trust.mtq">Transports Québec</li>
+      </ul>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>15<i>+</i></b><span data-i="stat.1">années en infrastructure, réseau et infonuagique</span></div>
+      <div class="stat"><b>5</b><span data-i="stat.2">certifications Microsoft, HashiCorp et OffSec</span></div>
+      <div class="stat"><b>3</b><span data-i="stat.3">nuages maîtrisés : Azure, AWS et Google Cloud</span></div>
+    </div>
+  </main>
+</div>
+
+<section aria-labelledby="pipe-t">
+  <div class="wrap">
+    <h2 class="sec-title" id="pipe-t" data-i="pipe.title">Une IA qui répond avec vos données, pas avec des devinettes.</h2>
+    <p class="sec-sub" data-i="pipe.sub">Un assistant fiable, c'est surtout une bonne architecture. Je m'occupe de chaque étage.</p>
+    <div class="pipe">
+      <div class="pulse" aria-hidden="true"></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></div><div><b data-i="p1.t">Vos données</b><span data-i="p1.d">SharePoint, bases, API</span></div></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg></div><div><b data-i="p2.t">Indexation</b><span data-i="p2.d">Découpées et vectorisées</span></div></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M15 15l5 5"/></svg></div><div><b data-i="p3.t">Recherche</b><span data-i="p3.d">Les bons passages, trouvés</span></div></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="6" r="2"/><circle cx="20" cy="6" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><path d="M6 7l4 3M18 7l-4 3M6 17l4-3M18 17l-4-3"/></svg></div><div><b data-i="p4.t">Modèle</b><span data-i="p4.d">Rédige la réponse</span></div></div>
+      <div class="step"><div class="node"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10l2.5 2.5L16 8"/></svg></div><div><b data-i="p5.t">Réponse sourcée</b><span data-i="p5.d">Vérifiable, en tout temps</span></div></div>
+    </div>
+    <div class="base">
+      <strong data-i="base.label">Le tout sur une base solide</strong>
+      <code>Azure</code><code>Kubernetes</code><code>Terraform</code><code>Zero Trust</code><code>CI/CD</code>
+    </div>
+  </div>
+</section>
+
+<section id="services" style="padding-top:0" aria-labelledby="svc-t">
+  <div class="wrap">
+    <h2 class="sec-title" id="svc-t" data-i="svc.title">Ce que je construis</h2>
+    <p class="sec-sub" data-i="svc.sub">Un seul interlocuteur, de l'architecture jusqu'au déploiement.</p>
+    <div class="svc">
+      <article class="lead"><h3 data-i="s1.t">Infrastructure pour l'IA</h3><p data-i="s1.d">Services d'IA Azure, AKS et données branchés de façon sécurisée, prêts pour une vraie charge.</p></article>
+      <article><h3 data-i="s2.t">Architecture infonuagique</h3><p data-i="s2.d">Migration et modernisation vers Azure ou AWS, haute disponibilité et plan de relève.</p></article>
+      <article><h3 data-i="s3.t">DevOps et infrastructure as code</h3><p data-i="s3.d">Terraform, Pulumi et pipelines automatisés pour livrer souvent, sans surprise.</p></article>
+      <article><h3 data-i="s4.t">Réseau et sécurité</h3><p data-i="s4.d">Zero Trust, SD-WAN, pare-feu nouvelle génération et accès privilégiés maîtrisés.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="mandats" style="padding-top:0" aria-labelledby="work-t">
+  <div class="wrap">
+    <h2 class="sec-title" id="work-t" data-i="work.title">Mandats récents</h2>
+    <p class="sec-sub" data-i="work.sub">Des systèmes critiques, dans des organisations qui ne peuvent pas se permettre une panne.</p>
+    <div class="cases">
+      <article class="case">
+        <p class="client">Desjardins</p>
+        <h3 data-i="c1.t">Architecture de la solution API centrale de tout le Mouvement.</h3>
+        <ul class="tags"><li>Terraform</li><li>Concourse</li><li>Azure WAF/NSG</li><li>Kubernetes</li></ul>
+      </article>
+      <article class="case">
+        <p class="client">Élections Québec</p>
+        <h3 data-i="c2.t">Accès Zero Trust aux systèmes critiques, de l'étude de marché au déploiement.</h3>
+        <ul class="tags"><li>ZTNA</li><li>PIM</li><li>PoC</li><li data-i="c2.tag">Appel d'offres</li></ul>
+      </article>
+      <article class="case">
+        <p class="client" data-i="trust.ia">iA Groupe financier</p>
+        <h3 data-i="c3.t">Chiffrement côté client des données sensibles et validation automatique des pipelines.</h3>
+        <ul class="tags"><li>MongoDB CSFLE</li><li>Azure DevOps</li></ul>
+      </article>
+      <article class="case">
+        <p class="client">Agri-Marché</p>
+        <h3 data-i="c4.t">Migration complète vers Azure et silos à grains connectés en IoT.</h3>
+        <ul class="tags"><li>ExpressRoute</li><li>SD-WAN</li><li>LoRaWAN</li><li>SIEM/EDR</li></ul>
+      </article>
+    </div>
+    <div class="certs">
+      <a href="https://learn.microsoft.com/api/credentials/share/en-us/rtlefrancois/9DCC33618A756807?sharingId=8949BABBB5D0117D" target="_blank" rel="noopener">Azure AI Fundamentals</a>
+      <a href="https://learn.microsoft.com/api/credentials/share/en-us/rtlefrancois/2F4060565BBE134F?sharingId=8949BABBB5D0117D" target="_blank" rel="noopener">Azure Administrator Associate</a>
+      <a href="https://www.credly.com/badges/da08a5e0-e301-40a9-9df1-4eccf1128fa8/linked_in_profile" target="_blank" rel="noopener">Terraform Associate</a>
+      <a href="https://learn.microsoft.com/api/credentials/share/en-us/rtlefrancois/D0C9727147B85361?sharingId=8949BABBB5D0117D" target="_blank" rel="noopener">Azure Fundamentals</a>
+      <a href="https://www.offsec.com/courses/pen-200/" target="_blank" rel="noopener">OffSec PEN-200</a>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap">
+    <h2 data-i="contact.title">On construit quoi?</h2>
+    <p data-i="contact.sub">Parlez-moi de votre projet, on regarde ensemble par où commencer.</p>
+    <div class="ctas">
+      <a class="btn primary" href="mailto:rtlefrancois@itrel.ca">rtlefrancois@itrel.ca</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/registremblay/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <span>© 2026 itrel</span>
+    <span><a href="https://github.com/regg00" target="_blank" rel="noopener">GitHub</a> &nbsp;&nbsp; <span data-i="foot.loc">Lévis, Québec</span></span>
+  </footer>
+</div>
+
+<script is:inline>
+(function(){
+  var en={
+    "nav.services":"Services","nav.work":"Work","nav.contact":"Get in touch",
+    "hero.who":"Régis Tremblay Lefrançois, cloud architect",
+    "hero.title":"AI needs solid foundations.",
+    "hero.lede":"I design the Azure, Kubernetes and network infrastructure that takes your AI projects from demo to production, securely.",
+    "hero.cta":"Start a project","hero.cta2":"See my work",
+    "trust.label":"Trusted by","trust.ia":"iA Financial Group","trust.mtq":"Québec Ministry of Transport",
+    "stat.1":"years in infrastructure, networking and cloud","stat.2":"Microsoft, HashiCorp and OffSec certifications","stat.3":"clouds mastered: Azure, AWS and Google Cloud",
+    "pipe.title":"AI that answers from your data, not from guesswork.",
+    "pipe.sub":"A reliable assistant is mostly good architecture. I take care of every layer.",
+    "p1.t":"Your data","p1.d":"SharePoint, databases, APIs","p2.t":"Indexing","p2.d":"Chunked and vectorized",
+    "p3.t":"Retrieval","p3.d":"The right passages, found","p4.t":"Model","p4.d":"Writes the answer",
+    "p5.t":"Sourced answer","p5.d":"Verifiable, every time","base.label":"All on a solid base",
+    "svc.title":"What I build","svc.sub":"One point of contact, from architecture to deployment.",
+    "s1.t":"Infrastructure for AI","s1.d":"Azure AI services, AKS and data wired up securely, ready for real load.",
+    "s2.t":"Cloud architecture","s2.d":"Migration and modernization to Azure or AWS, high availability and disaster recovery.",
+    "s3.t":"DevOps and infrastructure as code","s3.d":"Terraform, Pulumi and automated pipelines to ship often, without surprises.",
+    "s4.t":"Networking and security","s4.d":"Zero Trust, SD-WAN, next-gen firewalls and privileged access under control.",
+    "work.title":"Recent work","work.sub":"Critical systems, in organizations that can't afford downtime.",
+    "c1.t":"Architecture of the core API solution for the entire Desjardins movement.",
+    "c2.t":"Zero Trust access to mission-critical systems, from market study to rollout.","c2.tag":"RFP",
+    "c3.t":"Client-side encryption of sensitive data and automated pipeline validation.",
+    "c4.t":"Full migration to Azure and IoT-connected grain silos.",
+    "contact.title":"What are we building?","contact.sub":"Tell me about your project and we will figure out where to start.",
+    "foot.loc":"Lévis, Québec"
+  };
+  var fr={}, nodes=document.querySelectorAll("[data-i]");
+  nodes.forEach(function(n){ if(!(n.dataset.i in fr)) fr[n.dataset.i]=n.textContent; });
+  var meta={fr:{t:document.title},en:{t:"itrel — Cloud architecture and AI"}};
+  function set(lang){
+    var d=lang==="en"?en:fr;
+    nodes.forEach(function(n){ if(d[n.dataset.i]) n.textContent=d[n.dataset.i]; });
+    document.documentElement.lang=lang; document.title=meta[lang].t;
+    document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.lang===lang)});
+    try{localStorage.setItem("itrel-lang",lang)}catch(e){}
+  }
+  document.querySelectorAll(".lang button").forEach(function(b){b.addEventListener("click",function(){set(b.dataset.lang)})});
+  var q=new URLSearchParams(location.search).get("lang"), saved=null;
+  try{saved=localStorage.getItem("itrel-lang")}catch(e){}
+  var start=q||saved||(/\/en\/?$/.test(location.pathname)?"en":"fr");
+  if(start==="en") set("en");
+})();
+</script>
+</body>
+</html>
